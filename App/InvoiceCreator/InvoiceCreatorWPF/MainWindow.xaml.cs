@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DataAccess;
+using Microsoft.Win32;
 
 namespace InvoiceCreatorWPF
 {
@@ -25,7 +27,26 @@ namespace InvoiceCreatorWPF
         {
             InitializeComponent();
 
-            MessageBox.Show(FilePaths.DataStorageRootFolderPath);
+            //OpenFileDialog openFileDialog = new OpenFileDialog();
+            //openFileDialog.InitialDirectory = FilePaths.InvoicesDataFolderPath;
+            //openFileDialog.Title = "Choose invoice to open";
+            //openFileDialog.Filter = "Text Files | *.txt";
+            
+            //bool? result = openFileDialog.ShowDialog();
+
+            //if (result == null || result == false)
+            //{
+            //    return;
+            //}
+
+            //string filePath = System.IO.Path.GetFullPath(
+            //        System.IO.Path.Combine(FilePaths.InvoicesDataFolderPath, @".\InvoiceDemo1.txt"));
+
+            //List<string> lines = TextFileUtility.ReadAllLines(openFileDialog.FileName);
+
+            //MessageBox.Show(lines.Count.ToString());
+
+
         }
     }
 }

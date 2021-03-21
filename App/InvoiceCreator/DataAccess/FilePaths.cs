@@ -21,21 +21,12 @@ namespace DataAccess
             }
         }
 
-        public static string FlightLogsDataFolderPath
+        public static string InvoicesDataFolderPath
         {
             get
             {
                 return Path.GetFullPath(
-                    Path.Combine(DataStorageRootFolderPath, @".\FlightLogs\"));
-            }
-        }
-
-        public static string FlightLogFilePath
-        {
-            get
-            {
-                return Path.GetFullPath(
-                    Path.Combine(FlightLogsDataFolderPath, @".\FlightLog.xml"));
+                    Path.Combine(DataStorageRootFolderPath, @".\Invoices\"));
             }
         }
     }
