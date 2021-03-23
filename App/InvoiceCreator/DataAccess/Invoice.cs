@@ -8,19 +8,35 @@ namespace DataAccess
 {
     public class Invoice
     {
-        private readonly string[] _items;
-        
-        public string[] Items
-        {
-            get => _items;
+        private string _invoiceNumber;
+        private DateTime _invoiceDate;
+        private DateTime _dueDate;
+        private string _receiverCompanyName;
+        private string _receiverPersonName;
+        private string _receiverStreetAddress;
+        private string _receiverZipCode;
+        private string _receiverCity;
+        private string _receiverCountry;
+        private int _numberOfItems;  // Maybe remove
+        private List<InvoiceItem> _items;
+        private string _senderCompanyName;
+        private string _senderStreetAddress;
+        private string _senderZipCode;
+        private string _senderCity;
+        private string _senderCountry;
+        private string _senderPhone;
+        private string _homePage;
 
-            init => _items = value ??
-                throw new ArgumentNullException("Items", "Items cannot be null");
-        }
+
+
+
+
+
+        
 
         public Invoice(string[] items)
         {
-            Items = items;
+
         }
     }
 }
