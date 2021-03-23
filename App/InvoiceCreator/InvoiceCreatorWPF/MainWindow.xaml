@@ -5,11 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InvoiceCreatorWPF"
         mc:Ignorable="d"
-        Title="Invoice Creator" Height="450" Width="800">
+        Title="Invoice Creator" Height="700" Width="1000" WindowStartupLocation="CenterScreen">
+    
     <Grid Margin="15">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -18,11 +20,11 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <!-- Row 1 -->
         <StackPanel Margin="0 0 5 0">
             <TextBlock
                 Text="Invoice Creator" FontSize="30"
-                Margin="0 0 0 10" />
+                Margin="0 0 0 10"
+            />
             <TextBlock
                 Text="Create invoices by loading data from text files."
                 FontSize="16" TextWrapping="Wrap" Margin="0 0 0 25"
@@ -33,7 +35,7 @@
                 Padding="5" Margin="0 0 0 15"
             />
             <Button
-                x:Name="btnAddInvoiceLogo" Content="Add logo" 
+                x:Name="btnAddInvoiceLogo" Click="btnAddInvoiceLogo_Click" Content="Add logo" 
                 Background="#ddd" BorderThickness="0" FontSize="14"
                 Padding="5" Margin="0 0 0 15"
             />
@@ -44,12 +46,124 @@
             />
         </StackPanel>
 
-        <DataGrid Grid.Column="1" Grid.RowSpan="2" Margin="5 0 0 0">
+        <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3" Margin="5 0 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <Image x:Name="imageLogo" MaxWidth="200" Height="125"/>
+                <TextBlock Text="Apu Beverages Inc" HorizontalAlignment="Center" FontSize="20"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Margin="5 0 0 0">
+                <Border
+                    BorderThickness="1" BorderBrush="#888"
+                    Padding="2" Margin="0 0 0 15">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="Invoice number" HorizontalAlignment="Left" />
+                        <TextBlock x:Name="textBlockInvoiceNumber" Grid.Column="1" Text="2020-33" HorizontalAlignment="Right" />
+                    </Grid>
+                </Border>
+
+                <Border BorderThickness="1" BorderBrush="#888" Padding="2">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="Invoice date" HorizontalAlignment="Left" />
+                        <TextBlock x:Name="textBlockInvoiceDate" Grid.Column="1" Text="2021-03-01" HorizontalAlignment="Right" />
+                    </Grid>
+                </Border>
+
+                <Border
+                    BorderThickness="1" BorderBrush="#888"
+                    Padding="2" Margin="0 0 0 15">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="Due date" HorizontalAlignment="Left" />
+                        <TextBlock x:Name="textBlockInvoiceDueDate" Grid.Column="1" Text="2021-03-31" HorizontalAlignment="Right" />
+                    </Grid>
+                </Border>
+
+                <Border
+                    BorderThickness="1" BorderBrush="#888"
+                    Padding="2">
+                    <StackPanel>
+                        <TextBlock x:Name="textBlockReceiverCompany" Text="Simpsons Enterprice" />
+                        <TextBlock x:Name="textBlockReceiverNameOfPerson" Text="Homer Simpson" />
+                        <TextBlock x:Name="textBlockReceiverStreetAddress" Text="High street 12" />
+                        <TextBlock x:Name="textBlockReceiverZipAndCity" Text="226 47 Lund" />
+                        <TextBlock x:Name="textBlockReceiverCountry" Text="Sweden" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+        
+        
+
+        <DataGrid
+            x:Name="dataGridInvoiceItems" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+            CanUserAddRows="False" AlternatingRowBackground="Gray">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Item" />
+                <DataGridTextColumn Header="Description" Width="175" />
+                <DataGridTextColumn Header="Quantity" />
+                <DataGridTextColumn Header="Unit price" />
+                <DataGridTextColumn Header="Tax (%)" />
+                <DataGridTextColumn Header="Total tax" Width="80" />
+                <DataGridTextColumn Header="Total" Width="80" />
+            </DataGrid.Columns>
             
         </DataGrid>
 
-        <WrapPanel Grid.Row="2" Grid.Column="1" Margin="5 0 0 0">
+        <!--<WrapPanel Grid.Row="2" Grid.Column="1">
             <TextBlock Text="You can give a discount in the box to the right at the bottom." />
-        </WrapPanel>
+        </WrapPanel>-->
+
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Address" />
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="Phone" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Text="Homepage" />
+            <TextBlock x:Name="textBlockSenderStreetAddress" Grid.Row="1" Grid.Column="0" Text="Test" />
+            <TextBlock x:Name="textBlockSenderPhone" Grid.Row="1" Grid.Column="1" Text="Test" />
+            <TextBlock x:Name="textBlockSenderSenderHomePage" Grid.Row="1" Grid.Column="2" Text="Test" />
+            <TextBlock x:Name="textBlockSenderZipAndCity" Grid.Row="2" Grid.Column="0" Text="Test" />
+        </Grid>
+        
+        
+
+
     </Grid>
 </Window>

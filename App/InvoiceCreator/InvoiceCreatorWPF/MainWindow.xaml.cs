@@ -26,7 +26,7 @@ namespace InvoiceCreatorWPF
 
 
 
-
+        
 
 
         // ======================== Properties ======================== //
@@ -81,6 +81,25 @@ namespace InvoiceCreatorWPF
             }
         }
 
+        private void AddLogo_EventHandler()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.InitialDirectory = FilePaths.ImagesRootFolder;
+            openFileDialog.Title = "Choose invoice to open";
+            openFileDialog.Filter = "All|*.*|JPG|*.jpg|JPEG|*.jpeg|PNG|*.png";
+
+            bool? result = openFileDialog.ShowDialog();
+
+            if (result == null || result == false)
+            {
+                return;
+            }
+
+            Uri imageUri = new Uri(openFileDialog.FileName, UriKind.Absolute);
+
+            imageLogo.Source = new BitmapImage(imageUri);
+        }
+
 
 
 
@@ -90,6 +109,11 @@ namespace InvoiceCreatorWPF
         private void btnLoadInvoice_Click(object sender, RoutedEventArgs e)
         {
             LoadInvoice_EventHandler();
+        }
+
+        private void btnAddInvoiceLogo_Click(object sender, RoutedEventArgs e)
+        {
+            AddLogo_EventHandler();
         }
     }
 }

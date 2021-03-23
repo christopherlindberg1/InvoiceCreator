@@ -12,12 +12,21 @@ namespace DataAccess
     /// </summary>
     public class FilePaths
     {
+        private static string AppRootPath
+        {
+            get
+            {
+                return Path.GetFullPath(
+                    Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\"));
+            }
+        }
+
         public static string DataStorageRootFolderPath
         {
             get
             {
                 return Path.GetFullPath(
-                    Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\DataAccess\Storage\"));
+                    Path.Combine(AppRootPath, @".\DataAccess\Storage\"));
             }
         }
 
@@ -27,6 +36,15 @@ namespace DataAccess
             {
                 return Path.GetFullPath(
                     Path.Combine(DataStorageRootFolderPath, @".\Invoices\"));
+            }
+        }
+
+        public static string ImagesRootFolder
+        {
+            get
+            {
+                return Path.GetFullPath(
+                    Path.Combine(AppRootPath, @".\InvoiceCreatorWPF\Images\"));
             }
         }
     }
