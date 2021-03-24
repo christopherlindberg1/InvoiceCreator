@@ -244,6 +244,7 @@ namespace DataAccess
                 {
                     InvoiceItem invoiceItem = new InvoiceItem();
 
+                    invoiceItem.ItemInOrder = i + 1;
                     // Each invoice item will increment the index with 4 since each invoice item has 4 fields
                     invoiceItem.Description = items[index++];
                     invoiceItem.Quantity = int.Parse(items[index++]);

@@ -83,6 +83,9 @@ namespace InvoiceCreatorWPF
             {
                 dataGridInvoiceItems.Items.Add(invoiceItem);
             }
+
+            
+            
         }
 
 

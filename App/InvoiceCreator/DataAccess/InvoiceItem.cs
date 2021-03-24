@@ -9,10 +9,19 @@ namespace DataAccess
 {
     public class InvoiceItem
     {
+        private int _itemInOrder;    // 1st element has 1, 2nd has 2 etc.
         private string _description;
         private int _quantity;
         private decimal _unitPrice;
         private decimal _taxInPercent;
+
+
+        public int ItemInOrder
+        {
+            get => _itemInOrder;
+
+            set => _itemInOrder = value;
+        }
 
         public string Description
         {

@@ -105,6 +105,7 @@
                     </Grid>
                 </Border>
 
+                <TextBlock Text="Receiver details" />
                 <Border
                     BorderThickness="1" BorderBrush="#888"
                     Padding="2">
@@ -123,16 +124,16 @@
             x:Name="dataGridInvoiceItems" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
             CanUserAddRows="False" AlternatingRowBackground="#eee">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Item" />
-                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="175" />
-                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" />
-                <DataGridTextColumn Header="Unit price" Binding="{Binding UnitPrice}" />
-                <DataGridTextColumn Header="Tax (%)" Binding="{Binding TaxInPercent}" />
-                <DataGridTextColumn Header="Total tax" Binding="{Binding TotalTax}" Width="80" />
-                <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="80" />
+                <DataGridTextColumn Header="Item" Binding="{Binding ItemInOrder, Mode=OneWay}" />
+                <DataGridTextColumn Header="Description" Binding="{Binding Description, Mode=OneWay}" Width="175" />
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity, Mode=OneWay}" />
+                <DataGridTextColumn Header="Unit price" Binding="{Binding UnitPrice, Mode=OneWay}" />
+                <DataGridTextColumn Header="Tax (%)" Binding="{Binding TaxInPercent, Mode=OneWay}" />
+                <DataGridTextColumn Header="Total tax" Binding="{Binding TotalTax, Mode=OneWay}" Width="80" />
+                <DataGridTextColumn Header="Total" Binding="{Binding Total, Mode=OneWay}" Width="80" />
             </DataGrid.Columns>
         </DataGrid>
-
+        
         <!--<WrapPanel Grid.Row="2" Grid.Column="1">
             <TextBlock Text="You can give a discount in the box to the right at the bottom." />
         </WrapPanel>-->
