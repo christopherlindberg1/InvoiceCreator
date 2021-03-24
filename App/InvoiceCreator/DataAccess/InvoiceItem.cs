@@ -76,5 +76,15 @@ namespace DataAccess
                 _taxInPercent = value;
             }
         }
+
+        public decimal TotalTax
+        {
+            get => UnitPrice * Quantity * (TaxInPercent / 100);
+        }
+
+        public decimal Total
+        {
+            get => UnitPrice * Quantity + TotalTax;
+        }
     }
 }
