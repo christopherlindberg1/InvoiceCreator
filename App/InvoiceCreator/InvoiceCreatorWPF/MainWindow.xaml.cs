@@ -25,7 +25,6 @@ namespace InvoiceCreatorWPF
         private Invoice _invoice;
 
 
-
         
 
 
@@ -54,6 +53,42 @@ namespace InvoiceCreatorWPF
 
 
 
+
+
+        private void AddInvoiceDataToGUI()
+        {
+            if (Invoice == null)
+            {
+                throw new ArgumentNullException("Invoice", "Invoice cannot be null when calling this method");
+            }
+
+            textBlockInvoiceNumber.Text = Invoice.InvoiceNumber;
+            textBlockInvoiceDate.Text = Invoice.Date.ToShortDateString();
+            textBlockInvoiceDueDate.Text = Invoice.DueDate.ToShortDateString();
+
+            // Receiver info
+            textBlockReceiverCompany.Text = Invoice.ReceiverCompanyName;
+            textBlockReceiverNameOfPerson.Text = Invoice.ReceiverPersonName;
+            textBlockReceiverStreetAddress.Text = Invoice.ReceiverStreetAddress;
+            textBlockReceiverZipAndCity.Text = Invoice.ReceiverZipAndCity;
+            textBlockReceiverCountry.Text = Invoice.ReceiverCountry;
+
+            // Sender info
+            textBlockSenderStreetAddress.Text = Invoice.SenderStreetAddress;
+            textBlockSenderPhone.Text = Invoice.SenderPhone;
+            textBlockSenderSenderHomePage.Text = Invoice.SenderHomePage;
+            textBlockSenderZipAndCity.Text = Invoice.SenderZipAndCity;
+
+            foreach (InvoiceItem invoiceItem in Invoice.Items)
+            {
+                dataGridInvoiceItems.Items.Add(invoiceItem);
+            }
+        }
+
+
+
+
+
         // ======================== Event handler methods ======================== //
 
         private void LoadInvoice_EventHandler()
@@ -74,6 +109,8 @@ namespace InvoiceCreatorWPF
             {
                 string[] invoiceItems = TextFileUtility.GetInvoiceItems(openFileDialog.FileName);
                 Invoice = new Invoice(invoiceItems);
+
+                AddInvoiceDataToGUI();
             }
             catch (Exception ex)
             {

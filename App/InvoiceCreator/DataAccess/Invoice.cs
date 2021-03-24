@@ -17,7 +17,7 @@ namespace DataAccess
         private string _receiverZipCode;
         private string _receiverCity;
         private string _receiverCountry;
-        //private int _numberOfItems;  // Maybe remove
+        private int _numberOfItems;
         private List<InvoiceItem> _items;
         private string _senderCompanyName;
         private string _senderStreetAddress;
@@ -25,7 +25,7 @@ namespace DataAccess
         private string _senderCity;
         private string _senderCountry;
         private string _senderPhone;
-        private string _homePage;
+        private string _senderHomePage;
 
         public string InvoiceNumber
         {
@@ -89,6 +89,11 @@ namespace DataAccess
                 throw new ArgumentException("ReceiverCity", "ReceiverCity cannot be null");
         }
 
+        public string ReceiverZipAndCity
+        {
+            get => $"{ ReceiverZipCode } { ReceiverCity }";
+        }
+
         public string ReceiverCountry
         {
             get => _receiverCountry;
@@ -97,9 +102,35 @@ namespace DataAccess
                 throw new ArgumentException("ReceiverCountry", "ReceiverCountry cannot be null");
         }
 
+        public int NumberOfItems
+        {
+            get => _numberOfItems;
+
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(
+                        "NumberOfItems", "NumberOfItems cannot be less than 0");
+                }
+
+                _numberOfItems = value;
+            }
+        }
+
         public List<InvoiceItem> Items
         {
             get => _items;
+
+            init
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException("Items", "Items cannot be null");
+                }
+
+                _items = value;
+            }
         }
 
         public string SenderCompanyName
@@ -134,6 +165,11 @@ namespace DataAccess
                 throw new ArgumentException("SenderCity", "SenderCity cannot be null");
         }
 
+        public string SenderZipAndCity
+        {
+            get => $"{ SenderZipCode } { SenderCity }";
+        }
+
         public string SenderCountry
         {
             get => _senderCountry;
@@ -150,24 +186,109 @@ namespace DataAccess
                 throw new ArgumentException("SenderPhone", "SenderPhone cannot be null");
         }
 
-        public string HomePage
+        public string SenderHomePage
         {
-            get => _homePage;
+            get => _senderHomePage;
 
-            set => _homePage = value ??
-                throw new ArgumentException("HomePage", "HomePage cannot be null");
+            set => _senderHomePage = value ??
+                throw new ArgumentException("SenderHomePage", "SenderHomePage cannot be null");
         }
 
+        public decimal TotalTax
+        {
+            get => Items.Sum(item => item.TotalTax);
+            //get
+            //{
+            //    decimal sum = 0;
 
+            //    foreach (InvoiceItem item in Items)
+            //    {
+            //        sum += item.TotalTax;
+            //    }
 
+            //    return sum;
+            //}
+        }
 
+        public decimal Total
+        {
+            get => Items.Sum(item => item.Total);
+        }
 
 
 
 
         public Invoice(string[] items)
         {
+            // The parsing could throw a FormatExceptions if the indices doesn't match lines
+            // in the text file from which "items" was generated.
+            try
+            {
+                InvoiceNumber = items[0];
+                Date = DateTime.Parse(items[1]);
+                DueDate = DateTime.Parse(items[2]);
+                ReceiverCompanyName = items[3];
+                ReceiverPersonName = items[4];
+                ReceiverStreetAddress = items[5];
+                ReceiverZipCode = items[6];
+                ReceiverCity = items[7];
+                ReceiverCountry = items[8];
+                NumberOfItems = int.Parse(items[9]);
 
+                // Create InvoiceItem objects and add them to the Items list
+                Items = new List<InvoiceItem>();
+
+                int index = 10;
+
+                for (int i = 0; i < NumberOfItems; i++)
+                {
+                    InvoiceItem invoiceItem = new InvoiceItem();
+
+                    // Each invoice item will increment the index with 4 since each invoice item has 4 fields
+                    invoiceItem.Description = items[index++];
+                    invoiceItem.Quantity = int.Parse(items[index++]);
+
+                    // Parse the decimal values. Change between period and comma to make it work 
+                    // on the system running the app.
+                    string unitPriceString = items[index++];
+                    decimal unitPrice;
+
+                    if (decimal.TryParse(unitPriceString, out unitPrice) == false)
+                    {
+                        if (unitPriceString.Contains('.'))
+                        {
+                            string updatedUnitPriceString = unitPriceString.Replace('.', ',');
+                            unitPrice = decimal.Parse(updatedUnitPriceString);
+                        } else
+                        {
+                            string updatedUnitPriceString = unitPriceString.Replace(',', '.');
+                            unitPrice = decimal.Parse(updatedUnitPriceString);
+                        }
+                    }
+
+                    invoiceItem.UnitPrice = unitPrice;
+                    invoiceItem.TaxInPercent = decimal.Parse(items[index++]);
+
+                    Items.Add(invoiceItem);
+                }
+
+                SenderCompanyName = items[index++];
+                SenderStreetAddress = items[index++];
+                SenderZipCode = items[index++];
+                SenderCity = items[index++];
+                SenderCountry = items[index++];
+                SenderPhone = items[index++];
+                SenderHomePage = items[index++];
+            }
+            // Just throw the exceptions to the caller.
+            catch (FormatException)
+            {
+                throw;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

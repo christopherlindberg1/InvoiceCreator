@@ -75,7 +75,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0" Text="Invoice number" HorizontalAlignment="Left" />
-                        <TextBlock x:Name="textBlockInvoiceNumber" Grid.Column="1" Text="2020-33" HorizontalAlignment="Right" />
+                        <TextBlock x:Name="textBlockInvoiceNumber" Grid.Column="1" Text="" HorizontalAlignment="Right" />
                     </Grid>
                 </Border>
 
@@ -87,7 +87,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0" Text="Invoice date" HorizontalAlignment="Left" />
-                        <TextBlock x:Name="textBlockInvoiceDate" Grid.Column="1" Text="2021-03-01" HorizontalAlignment="Right" />
+                        <TextBlock x:Name="textBlockInvoiceDate" Grid.Column="1" Text="" HorizontalAlignment="Right" />
                     </Grid>
                 </Border>
 
@@ -101,7 +101,7 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0" Text="Due date" HorizontalAlignment="Left" />
-                        <TextBlock x:Name="textBlockInvoiceDueDate" Grid.Column="1" Text="2021-03-31" HorizontalAlignment="Right" />
+                        <TextBlock x:Name="textBlockInvoiceDueDate" Grid.Column="1" Text="" HorizontalAlignment="Right" />
                     </Grid>
                 </Border>
 
@@ -109,31 +109,28 @@
                     BorderThickness="1" BorderBrush="#888"
                     Padding="2">
                     <StackPanel>
-                        <TextBlock x:Name="textBlockReceiverCompany" Text="Simpsons Enterprice" />
-                        <TextBlock x:Name="textBlockReceiverNameOfPerson" Text="Homer Simpson" />
-                        <TextBlock x:Name="textBlockReceiverStreetAddress" Text="High street 12" />
-                        <TextBlock x:Name="textBlockReceiverZipAndCity" Text="226 47 Lund" />
-                        <TextBlock x:Name="textBlockReceiverCountry" Text="Sweden" />
+                        <TextBlock x:Name="textBlockReceiverCompany" Text="" />
+                        <TextBlock x:Name="textBlockReceiverNameOfPerson" Text="" />
+                        <TextBlock x:Name="textBlockReceiverStreetAddress" Text="" />
+                        <TextBlock x:Name="textBlockReceiverZipAndCity" Text="" />
+                        <TextBlock x:Name="textBlockReceiverCountry" Text="" />
                     </StackPanel>
                 </Border>
             </StackPanel>
         </Grid>
         
-        
-
         <DataGrid
             x:Name="dataGridInvoiceItems" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
-            CanUserAddRows="False" AlternatingRowBackground="Gray">
+            CanUserAddRows="False" AlternatingRowBackground="#eee">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Item" />
-                <DataGridTextColumn Header="Description" Width="175" />
-                <DataGridTextColumn Header="Quantity" />
-                <DataGridTextColumn Header="Unit price" />
-                <DataGridTextColumn Header="Tax (%)" />
-                <DataGridTextColumn Header="Total tax" Width="80" />
-                <DataGridTextColumn Header="Total" Width="80" />
+                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="175" />
+                <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" />
+                <DataGridTextColumn Header="Unit price" Binding="{Binding UnitPrice}" />
+                <DataGridTextColumn Header="Tax (%)" Binding="{Binding TaxInPercent}" />
+                <DataGridTextColumn Header="Total tax" Binding="{Binding TotalTax}" Width="80" />
+                <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="80" />
             </DataGrid.Columns>
-            
         </DataGrid>
 
         <!--<WrapPanel Grid.Row="2" Grid.Column="1">
@@ -156,14 +153,10 @@
             <TextBlock Text="Address" />
             <TextBlock Grid.Row="0" Grid.Column="1" Text="Phone" />
             <TextBlock Grid.Row="0" Grid.Column="2" Text="Homepage" />
-            <TextBlock x:Name="textBlockSenderStreetAddress" Grid.Row="1" Grid.Column="0" Text="Test" />
-            <TextBlock x:Name="textBlockSenderPhone" Grid.Row="1" Grid.Column="1" Text="Test" />
-            <TextBlock x:Name="textBlockSenderSenderHomePage" Grid.Row="1" Grid.Column="2" Text="Test" />
-            <TextBlock x:Name="textBlockSenderZipAndCity" Grid.Row="2" Grid.Column="0" Text="Test" />
+            <TextBlock x:Name="textBlockSenderStreetAddress" Grid.Row="1" Grid.Column="0" Text="" />
+            <TextBlock x:Name="textBlockSenderPhone" Grid.Row="1" Grid.Column="1" Text="" />
+            <TextBlock x:Name="textBlockSenderSenderHomePage" Grid.Row="1" Grid.Column="2" Text="" />
+            <TextBlock x:Name="textBlockSenderZipAndCity" Grid.Row="2" Grid.Column="0" Text="" />
         </Grid>
-        
-        
-
-
     </Grid>
 </Window>
