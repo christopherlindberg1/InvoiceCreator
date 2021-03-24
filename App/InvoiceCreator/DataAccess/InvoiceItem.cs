@@ -79,7 +79,12 @@ namespace DataAccess
 
         public decimal TotalTax
         {
-            get => UnitPrice * Quantity * (TaxInPercent / 100);
+            get
+            {
+                decimal totalTax = UnitPrice * Quantity * (TaxInPercent / 100);
+                return totalTax;
+            }
+
         }
 
         public decimal Total
