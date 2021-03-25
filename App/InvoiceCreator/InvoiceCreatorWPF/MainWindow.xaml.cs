@@ -14,6 +14,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using System.ComponentModel;
+using System.Windows.Xps.Packaging;
+using System.IO;
 
 namespace InvoiceCreatorWPF
 {
@@ -23,9 +26,10 @@ namespace InvoiceCreatorWPF
     public partial class MainWindow : Window
     {
         private Invoice _invoice;
+        private ErrorMessageHandler _errorMessageHandler = new ErrorMessageHandler();
 
 
-        
+
 
 
         // ======================== Properties ======================== //
@@ -35,6 +39,14 @@ namespace InvoiceCreatorWPF
             get => _invoice;
 
             set => _invoice = value;
+        }
+
+        public ErrorMessageHandler ErrorMessageHandler
+        {
+            get => _errorMessageHandler;
+
+            set => _errorMessageHandler = value ??
+                throw new ArgumentNullException("ErrorMessageHandler", "ErrorMessageHandler cannot be null");
         }
 
 
@@ -63,8 +75,8 @@ namespace InvoiceCreatorWPF
             }
 
             textBlockInvoiceNumber.Text = Invoice.InvoiceNumber;
-            textBlockInvoiceDate.Text = Invoice.Date.ToShortDateString();
-            textBlockInvoiceDueDate.Text = Invoice.DueDate.ToShortDateString();
+            datePickerInvoiceDate.SelectedDate = Invoice.Date;
+            datePickerInvoiceDueDate.SelectedDate = Invoice.DueDate;
 
             // Receiver info
             textBlockReceiverCompany.Text = Invoice.ReceiverCompanyName;
@@ -79,13 +91,70 @@ namespace InvoiceCreatorWPF
             textBlockSenderSenderHomePage.Text = Invoice.SenderHomePage;
             textBlockSenderZipAndCity.Text = Invoice.SenderZipAndCity;
 
+            dataGridInvoiceItems.Items.Clear();
             foreach (InvoiceItem invoiceItem in Invoice.Items)
             {
                 dataGridInvoiceItems.Items.Add(invoiceItem);
             }
 
-            
-            
+            textBlockTotalCost.Text = Invoice.Total.ToString();
+            textBlockTotalTax.Text = Invoice.TotalTax.ToString();
+        }
+
+        private bool ValidateDiscount()
+        {
+            decimal discount = 0;
+            bool couldParse = false;
+
+            string input = textBoxDiscount.Text;
+
+            // If field is empty it still has to validate as a discount of 0
+            if (String.IsNullOrWhiteSpace(input))
+            {
+                return true;
+            }
+
+            if (decimal.TryParse(input, out discount) == false)
+            {
+                if (input.Contains('.'))
+                {
+                    string updatedInput = input.Replace('.', ',');
+                    couldParse = decimal.TryParse(updatedInput, out discount);
+                }
+                else if (input.Contains(','))
+                {
+                    string updatedInput = input.Replace(',', '.');
+                    couldParse = decimal.TryParse(updatedInput, out discount);
+                }
+                
+                if (couldParse == false)
+                {
+                    ErrorMessageHandler.AddMessage(
+                        "You must provice a whole or a decimal number. Try comma or period for decimal numbers.");
+
+                    return false;
+                }
+            }
+
+            if (discount < 0)
+            {
+                ErrorMessageHandler.AddMessage("The discount cannot be less than 0");
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ClearInputFields()
+        {
+            textBoxDiscount.Text = "";
+        }
+
+        private void UpdateInvoiceDataInGUI()
+        {
+            textBlockTotalCost.Text = Invoice.Total.ToString();
+            textBlockTotalTax.Text = Invoice.TotalTax.ToString();
         }
 
 
@@ -94,7 +163,7 @@ namespace InvoiceCreatorWPF
 
         // ======================== Event handler methods ======================== //
 
-        private void LoadInvoice_EventHandler()
+        private void LoadInvoice()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = FilePaths.InvoicesDataFolderPath;
@@ -121,7 +190,7 @@ namespace InvoiceCreatorWPF
             }
         }
 
-        private void AddLogo_EventHandler()
+        private void AddLogo()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.InitialDirectory = FilePaths.ImagesRootFolder;
@@ -140,6 +209,74 @@ namespace InvoiceCreatorWPF
             imageLogo.Source = new BitmapImage(imageUri);
         }
 
+        private void AddDiscount()
+        {
+            bool inputAndStateOk = true;
+            string input = textBoxDiscount.Text;
+            decimal discount = 0;
+
+            if (Invoice == null)
+            {
+                ErrorMessageHandler.AddMessage("You must load the invoice before adding a discount");
+                inputAndStateOk = false;
+            }
+            // Discount is 0 if field is empty
+            else if (String.IsNullOrWhiteSpace(input))
+            {
+                inputAndStateOk = true;
+            }
+            else if (ValidateDiscount() == false)
+            {
+                inputAndStateOk = false;
+            }
+            else
+            {
+                discount = decimal.Parse(input);
+                if (discount > Invoice.TotalWithoutDiscount)
+                {
+                    ErrorMessageHandler.AddMessage("The discount cannot be graeter than the total cost");
+                    inputAndStateOk = false;
+                }
+            }
+
+            if (inputAndStateOk == false)
+            {
+                MessageBox.Show(
+                    ErrorMessageHandler.GetMessages(),
+                    "Info",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                return;
+            }
+
+            Invoice.Discount = discount;
+            UpdateInvoiceDataInGUI();
+        }
+
+        private void PrintInvoice()
+        {
+            try
+            {
+                this.IsEnabled = false;
+
+                PrintDialog printDialog = new PrintDialog();
+
+                if (printDialog.ShowDialog() == true)
+                {
+                    printDialog.PrintVisual(printContent, "Invoice");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString());
+            }
+            finally
+            {
+                this.IsEnabled = true;
+            }
+        }
+
 
 
 
@@ -148,12 +285,22 @@ namespace InvoiceCreatorWPF
 
         private void btnLoadInvoice_Click(object sender, RoutedEventArgs e)
         {
-            LoadInvoice_EventHandler();
+            LoadInvoice();
         }
 
         private void btnAddInvoiceLogo_Click(object sender, RoutedEventArgs e)
         {
-            AddLogo_EventHandler();
+            AddLogo();
+        }
+
+        private void btnSaveDiscount_Click(object sender, RoutedEventArgs e)
+        {
+            AddDiscount();
+        }
+
+        private void btnPrintInvoice_Click(object sender, RoutedEventArgs e)
+        {
+            PrintInvoice();
         }
     }
 }

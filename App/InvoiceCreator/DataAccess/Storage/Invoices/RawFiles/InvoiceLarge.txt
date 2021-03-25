@@ -1,0 +1,31 @@
+2020-7
+2020-01-04	
+2020-02-15
+Simpson Enterprise
+Bart Simpson
+Springfield 34
+252 67
+Lund
+Sweden
+3
+Strong Bear
+15
+39.90
+25
+Garlic Bread
+6
+4.99
+6
+Vodka Super
+4
+119.90
+25
+Apu Beverages Inc
+Verages st 12
+12345
+Gothenburg
+Sweden
+000 123456
+Beverages.com
+
+

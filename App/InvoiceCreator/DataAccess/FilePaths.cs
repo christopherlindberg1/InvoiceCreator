@@ -35,7 +35,16 @@ namespace DataAccess
             get
             {
                 return Path.GetFullPath(
-                    Path.Combine(DataStorageRootFolderPath, @".\Invoices\"));
+                    Path.Combine(DataStorageRootFolderPath, @".\Invoices\RawFiles\"));
+            }
+        }
+
+        public static string PrintedInvoicesFolderPath
+        {
+            get
+            {
+                return Path.GetFullPath(
+                    Path.Combine(DataStorageRootFolderPath, @".\Invoices\PrintedInvoices\"));
             }
         }
 

@@ -26,6 +26,8 @@ namespace DataAccess
         private string _senderCountry;
         private string _senderPhone;
         private string _senderHomePage;
+        private decimal _totalWithoutDiscount;
+        private decimal _discount;
 
         public string InvoiceNumber
         {
@@ -194,27 +196,61 @@ namespace DataAccess
                 throw new ArgumentException("SenderHomePage", "SenderHomePage cannot be null");
         }
 
-        public decimal TotalTax
+        public decimal TotalWithoutDiscount
         {
-            get => Items.Sum(item => item.TotalTax);
-            //get
-            //{
-            //    decimal sum = 0;
+            get => _totalWithoutDiscount;
 
-            //    foreach (InvoiceItem item in Items)
-            //    {
-            //        sum += item.TotalTax;
-            //    }
-
-            //    return sum;
-            //}
+            init => _totalWithoutDiscount = value;
         }
 
         public decimal Total
         {
-            get => Items.Sum(item => item.Total);
+            get => Math.Round(_totalWithoutDiscount - Discount, 2);
         }
 
+        public decimal Discount
+        {
+            get => _discount;
+
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException(
+                        "Discount", "Discount cannot be less than 0");
+                }
+
+                _discount = value;
+            }
+        }
+
+        private Decimal DiscountInPercent
+        {
+            get
+            {
+                if (Total == 0)
+                {
+                    return 0;
+                }
+
+                return Discount / TotalWithoutDiscount;
+            }
+        }
+
+        public decimal TotalTax
+        {
+            get
+            {
+                if (Total == 0 || TotalWithoutDiscount == 0)
+                {
+                    return 0;
+                }
+
+                decimal tax = Items.Sum(item => item.TotalTax);
+
+                return Math.Round((tax - tax * DiscountInPercent), 2);
+            }
+        }
 
 
 
@@ -280,6 +316,8 @@ namespace DataAccess
                 SenderCountry = items[index++];
                 SenderPhone = items[index++];
                 SenderHomePage = items[index++];
+
+                TotalWithoutDiscount = Items.Sum(item => item.Total);
             }
             // Just throw the exceptions to the caller.
             catch (FormatException)

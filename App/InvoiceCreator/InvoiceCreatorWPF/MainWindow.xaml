@@ -20,7 +20,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
-        <StackPanel Margin="0 0 5 0">
+        <StackPanel Margin="0 0 15 0">
             <TextBlock
                 Text="Invoice Creator" FontSize="30"
                 Margin="0 0 0 10"
@@ -40,13 +40,13 @@
                 Padding="5" Margin="0 0 0 15"
             />
             <Button
-                x:Name="btnPrintInvoice" Content="Print invoice" 
+                x:Name="btnPrintInvoice" Click="btnPrintInvoice_Click" Content="Print invoice" 
                 Background="#ddd" BorderThickness="0" FontSize="14"
-                Padding="5" IsEnabled="false" 
+                Padding="5" IsEnabled="True" 
             />
         </StackPanel>
 
-        <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3" Margin="5 0 0 0">
+        <Grid x:Name="printContent" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3" Margin="5 0 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
@@ -86,8 +86,8 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="Invoice date" HorizontalAlignment="Left" />
-                        <TextBlock x:Name="textBlockInvoiceDate" Grid.Column="1" Text="" HorizontalAlignment="Right" />
+                        <TextBlock Grid.Column="0" Text="Invoice date" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <DatePicker x:Name="datePickerInvoiceDate" Grid.Column="1" Text="" HorizontalAlignment="Right" />
                     </Grid>
                 </Border>
 
@@ -100,8 +100,8 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="Due date" HorizontalAlignment="Left" />
-                        <TextBlock x:Name="textBlockInvoiceDueDate" Grid.Column="1" Text="" HorizontalAlignment="Right" />
+                        <TextBlock Grid.Column="0" Text="Due date" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <DatePicker x:Name="datePickerInvoiceDueDate" Grid.Column="1" Text="" HorizontalAlignment="Right" />
                     </Grid>
                 </Border>
 
@@ -119,7 +119,7 @@
                 </Border>
             </StackPanel>
         </Grid>
-        
+
         <DataGrid
             x:Name="dataGridInvoiceItems" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
             CanUserAddRows="False" AlternatingRowBackground="#eee">
@@ -138,26 +138,57 @@
             <TextBlock Text="You can give a discount in the box to the right at the bottom." />
         </WrapPanel>-->
 
-        <Grid Grid.Row="2" Grid.Column="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <Border Grid.Row="2" Grid.Column="1" Margin="0 10 5 0"
+                BorderThickness="1" BorderBrush="#bbb" Padding="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <TextBlock Text="Address" />
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="Phone" />
-            <TextBlock Grid.Row="0" Grid.Column="2" Text="Homepage" />
-            <TextBlock x:Name="textBlockSenderStreetAddress" Grid.Row="1" Grid.Column="0" Text="" />
-            <TextBlock x:Name="textBlockSenderPhone" Grid.Row="1" Grid.Column="1" Text="" />
-            <TextBlock x:Name="textBlockSenderSenderHomePage" Grid.Row="1" Grid.Column="2" Text="" />
-            <TextBlock x:Name="textBlockSenderZipAndCity" Grid.Row="2" Grid.Column="0" Text="" />
-        </Grid>
+                <TextBlock Text="Address" FontWeight="Bold" />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Phone" FontWeight="Bold" />
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Homepage" FontWeight="Bold" />
+                <TextBlock x:Name="textBlockSenderStreetAddress" Grid.Row="1" Grid.Column="0" Text="" />
+                <TextBlock x:Name="textBlockSenderPhone" Grid.Row="1" Grid.Column="1" Text="" />
+                <TextBlock x:Name="textBlockSenderSenderHomePage" Grid.Row="1" Grid.Column="2" Text="" />
+                <TextBlock x:Name="textBlockSenderZipAndCity" Grid.Row="2" Grid.Column="0" Text="" />
+            </Grid>
+        </Border>
+
+
+        <Border Grid.Row="2" Grid.Column="2" Margin="5 10 0 0"
+                BorderThickness="1" BorderBrush="#bbb" Padding="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Discount" FontWeight="Bold" Margin="0 0 10 0" VerticalAlignment="Center"/>
+                <TextBox x:Name="textBoxDiscount" Grid.Column="1" MinWidth="100" Margin="0 0 10 0" VerticalContentAlignment="Center"/>
+                <Button x:Name="btnSaveDiscount" Click="btnSaveDiscount_Click" Grid.Column="2" Content="Save discount" Padding="4"/>
+
+                <TextBlock Text="Total" Grid.Row="1" FontWeight="Bold" Margin="0 0 10 0"/>
+                <TextBlock x:Name="textBlockTotalCost" Text="0" Grid.Row="1" Grid.Column="1" MinWidth="100" />
+
+                <TextBlock Text="Total tax" Grid.Row="2" FontWeight="Bold" Margin="0 0 10 0"/>
+                <TextBlock x:Name="textBlockTotalTax" Text="0" Grid.Row="2" Grid.Column="1" MinWidth="100" />
+            </Grid>
+        </Border>
     </Grid>
 </Window>
